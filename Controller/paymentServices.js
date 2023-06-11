@@ -69,7 +69,7 @@ const createCardOrder = async (session) => {
 
     // 3) Create booking with default paymentMethodType card
     // const book = 
-    const book = await bookingModel.findOneAndUpdate({ id: bookingId }, {
+    const book = await bookingModel.findOneAndUpdate({ _id: bookingId }, {
         isPaid: true,
         paidAt: Date.now(),
         paymentMethodType: "card"
