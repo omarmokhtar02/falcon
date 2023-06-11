@@ -106,5 +106,5 @@ exports.webhookCheckOut = asyncHandler(async (req, res, next) => {
     }
 
     // Return a 200 response to acknowledge receipt of the event
-    res.status(200).json({ data: true });
+    res.status(200).json({ data: 'ok' });
 });
