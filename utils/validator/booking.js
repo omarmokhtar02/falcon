@@ -22,5 +22,12 @@ exports.flightValidator =
             .withMessage('paymentMethodType Should Not Empty')
             .isString()
             .withMessage('paymentMethodType Should be String')
+            , check('passport')
+            .notEmpty()
+            .withMessage('passport Should Not Empty')
+            .isString()
+            .withMessage('passport Should be String')
+            .isLength({ min: 9, max: 9 })
+            .withMessage('please enter valid passport with 9 charactar')
         , validatorMiddleware
     ]
