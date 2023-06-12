@@ -33,8 +33,8 @@ exports.getAllBookingUser = asyncHandler(async (req, res) => {
 });
 // Booking
 exports.bookOneWayFlight = asyncHandler(async (req, res, next) => {
-    const { num_passenger, cabin_class, paymentMethodType } = req.body
-    const book = await (await bookingModel.create({ user: req.user._id, flight_oneWay: req.params.id, num_passenger, cabin_class, paymentMethodType }))
+    const { num_passenger, cabin_class, paymentMethodType, passport } = req.body
+    const book = await (await bookingModel.create({ user: req.user._id, flight_oneWay: req.params.id, num_passenger, cabin_class, paymentMethodType, passport }))
         .populate({ path: 'flight_oneWay user' });
     const oneWay = await oneWayModel.findOne({ _id: req.params.id })
     book.totalBookingPrice = book.flight_oneWay.price * req.body.num_passenger;
@@ -55,9 +55,8 @@ exports.bookOneWayFlight = asyncHandler(async (req, res, next) => {
 });
 
 exports.bookTwoWayFlight = asyncHandler(async (req, res, next) => {
-    const { num_passenger, cabin_class, paymentMethodType } = req.body
-
-    const book = await (await bookingModel.create({ user: req.user._id, flight_twoWay: req.params.id, num_passenger, cabin_class, paymentMethodType }))
+     const { num_passenger, cabin_class, paymentMethodType, passport } = req.body
+    const book = await (await bookingModel.create({ user: req.user._id, flight_twoWay: req.params.id, num_passenger, cabin_class, paymentMethodType, passport }))
         .populate({ path: 'flight_twoWay user' });
     const twoWay = await multiWayModel.findOne({ _id: req.params.id })
 
@@ -78,9 +77,8 @@ exports.bookTwoWayFlight = asyncHandler(async (req, res, next) => {
 });
 
 exports.bookRoundTripFlight = asyncHandler(async (req, res, next) => {
-    const { num_passenger, cabin_class, paymentMethodType } = req.body
-
-    const book = await (await bookingModel.create({ user: req.user._id, flight_roundTrip: req.params.id, num_passenger, cabin_class, paymentMethodType }))
+    const { num_passenger, cabin_class, paymentMethodType, passport } = req.body
+    const book = await (await bookingModel.create({ user: req.user._id, flight_roundTrip: req.params.id, num_passenger, cabin_class, paymentMethodType, passport }))
         .populate({ path: 'flight_roundTrip user' });
     const roundTrip = await roundTripModel.findOne({ _id: req.params.id })
 
