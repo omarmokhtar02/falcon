@@ -1,10 +1,7 @@
 const asyncHandler = require("express-async-handler"),
     stripe = require("stripe")(process.env.STRIPE_SECRET),
     bookingModel = require('../models/bookingModel'),
-    userModel = require("../models/userModel"),
-    handler = require("./handlerFactory"),
     ApiError = require("../utils/apiError");
-
 
 // @desc create Checkout Session
 // @route Put /api/v1/order/create-checkout-session/bookingId
@@ -17,8 +14,7 @@ exports.createCheckoutSession = asyncHandler(async (req, res, next) => {
     if (!booking) {
         return next(new ApiError(404, `this user don't have any booking`));
     }
-    //2- Get order Price from Cart check(coupon or not)
-
+    //2- Get book Price 
     // eslint-disable-next-line prefer-destructuring
     let totalBookingPrice = booking.totalBookingPrice;
 
@@ -27,35 +23,21 @@ exports.createCheckoutSession = asyncHandler(async (req, res, next) => {
         payment_method_types: ["card"],
         line_items: [
             {
-                // https://stripe.com/docs/api/checkout/sessions/object
-                // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                // amount: totalOrderPrice * 100,
-                // name: req.user.name,
                 price_data: {
                     currency: "egp",
                     product_data: {
                         name: req.user.fname,
                     },
-
                     unit_amount: totalBookingPrice * 100,
                 },
                 quantity: 1,
-                // name: req.user.name,
-                // currency: "egp",
             },
         ],
         mode: "payment",
-        success_url: "http://sitename.com/checkout-success",
-        cancel_url: "http://sitename.com/checkout-cancel",
-
-        // req.protocol (http,http) If I want to get the domain I stand on dynamically https://www.udemy.com/
-        // success_url: `${req.protocol}://${req.get("host")}/order`,
-        // cancel_url: `${req.protocol}//:${req.get("host")}/cart`,
+        success_url: "https://falcon-1e2x.onrender.com/payment/checkout-success",
+        cancel_url: "https://falcon-1e2x.onrender.com/payment/checkout-fail",
         customer_email: req.user.email,
-        // customer_name: req.user.name,
-        // client_reference_id: cart._id.toString(),
         client_reference_id: req.params.bookingId,
-        // This can be useful for storing additional information about the object in a structured format.
         metadata: shippingAddress,
     });
     // 4- send session
@@ -65,22 +47,26 @@ exports.createCheckoutSession = asyncHandler(async (req, res, next) => {
 const createCardOrder = async (session) => {
     const bookingId = session.client_reference_id;
 
-    // const booking = await bookingModel.findById(bookingId);
 
     // 3) Create booking with default paymentMethodType card
-    // const book = 
     const book = await bookingModel.findOneAndUpdate({ _id: bookingId }, {
         isPaid: true,
         paidAt: Date.now(),
         paymentMethodType: "card"
     }, { new: true });
-    console.log(book)
+
 };
 
+exports.successPay = asyncHandler(async (req, res, next) => {
+    res.status(200).json('Successful Pay')
+})
 
+exports.failPay = asyncHandler(async (req, res, next) => {
+    res.status(200).json('Fail Pay')
+})
 
 // @desc    This webhook will run when stripe payment success paid
-// @route   POST /webhook-checkout
+// @route   POST /webhook
 // @access  Protected/User
 exports.webhookCheckOut = asyncHandler(async (req, res, next) => {
     const sig = req.headers["stripe-signature"];
