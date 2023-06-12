@@ -39,7 +39,11 @@ const bookSchema = new mongoose.Schema(
             enum: ["card", "cash"],
             default: "cash",
         },
-        
+                passport: {
+            type: String,
+            required: [true, 'passport is required'],
+
+        }
     },
     { timestamps: true }
 );
