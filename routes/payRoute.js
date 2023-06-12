@@ -9,8 +9,8 @@ const {
 } = require("../Controller/paymentServices");
 
 const router = express.Router();
-router.get('/checkout-success', allowedTo("user"), successPay);
-router.get('/checkout-fail', allowedTo("user"), failPay);
+router.get('/checkout-success', successPay);
+router.get('/checkout-fail', failPay);
 router.use(authProtect);
 router.post(
   "/create-checkout-session/:bookingId",
