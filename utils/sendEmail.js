@@ -8,12 +8,12 @@ const sendEmail = async (options) => {
     service: 'gmail',
     secure: false,
     auth: {
-      user: 'omarmokh78@gmail.com',
-      pass: 'jmggdyxjesblorpk'
+      user: 'mohamed.hamdy2023F@gmail.com',
+      pass: 'qguperowfybdmqvo'
     }
   });
   let mailOptions = {
-    from: 'omarmokh78@gmail.com', // sender address
+    from: 'mohamed.hamdy2023F@gmail.com', // sender address
     to: options.email, // list of receivers
     subject: options.subject, // Subject line
     text: options.message
