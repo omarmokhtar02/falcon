@@ -68,7 +68,7 @@ class ApiFeatures {
     }
     pagination(countDocument) {
         const page = this.queryString.page * 1 || 1; // page num 1
-        const limit = this.queryString.limit * 1 || 10; // num of Product in page (5 is defult value)
+        const limit = this.queryString.limit * 1 || 20; // num of Product in page (5 is defult value)
         const skip = (page - 1) * limit // skip Product in next page
         const endIndexPage = page * limit; //pagenum 2 * 10 limit =20
         // Pagination Result
