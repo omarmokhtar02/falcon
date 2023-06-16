@@ -156,7 +156,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     If you did not make this request then please ignore this email. \n
     Otherwise, this is reset code to change your password: ${resetCode}`;
   try {
-    await sendEmail({ email: user.email, subject: "Your reset password", message });
+    await sendEmail({ email: user.email, subject: "Falcon", message });
   } catch (err) {
     user.passwordResetCode = undefined;
     user.passwordResetExpire = undefined;
